@@ -32,7 +32,7 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('authToken', data.data.token);
         navigate('/dashboard');
       } else {
         setError(data.message || 'Login failed');

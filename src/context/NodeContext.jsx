@@ -32,8 +32,12 @@ function NodeProvider({ children }) {
   };
 
   useEffect(() => {
+  if (localStorage.getItem('authToken')) {  
     fetchNodes();
-  }, []);
+  } else {
+    setLoading(false); 
+  }
+}, []);
 
   const addNode = async (newNodeData) => {
     try {
@@ -85,4 +89,4 @@ function NodeProvider({ children }) {
   );
 }
 
-export default NodeProvider;
+export default NodeProvider;
