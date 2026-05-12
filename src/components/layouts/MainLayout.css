@@ -1,0 +1,31 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+}
+
+.app-layout__nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.app-layout__main {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.app-layout__content {
+  padding: var(--spacing-6);
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 768px) {
+  .app-layout__content {
+    padding: var(--spacing-8);
+  }
+}

@@ -1,0 +1,84 @@
+.pipe-age-pressure-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Tooltip Styles */
+.pipe-chart-tooltip {
+  background-color: var(--color-white, #ffffff);
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--color-gray-100, #f3f4f6);
+  min-width: 240px;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pipe-tooltip-location {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-gray-900, #111827);
+  margin: 0 0 0.75rem 0;
+}
+
+.pipe-tooltip-divider {
+  height: 1px;
+  background-color: var(--color-gray-100, #f3f4f6);
+  margin-bottom: 1rem;
+}
+
+.pipe-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pipe-tooltip-row:last-child {
+  margin-bottom: 0;
+}
+
+.pipe-tooltip-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.pipe-tooltip-dot.purple {
+  background-color: #a855f7;
+}
+
+.pipe-tooltip-dot.blue {
+  background-color: #3b82f6;
+}
+
+.pipe-tooltip-label {
+  font-size: 0.9375rem;
+  color: var(--color-gray-500, #6b7280);
+  flex: 1;
+}
+
+.pipe-tooltip-value {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.pipe-tooltip-value.purple {
+  color: #a855f7;
+}
+
+.pipe-tooltip-value.blue {
+  color: #3b82f6;
+}
+
+/* Animation for highlight */
+.pipe-chart-cursor {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  font-weight: var(--font-weight-regular);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Card Component */
+.card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-gray-100);
+  padding: var(--spacing-6);
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-6);
+}
+
+.card__title {
+  font-size: var(--font-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+/* Badge Component */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-xs);
+  text-transform: capitalize;
+}
+
+.badge--safe {
+  background-color: var(--color-green-50);
+  color: var(--color-green-700);
+}
+
+.badge--caution {
+  background-color: var(--color-yellow-50);
+  color: var(--color-yellow-700);
+}
+
+.badge--danger {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+/* Progress-bar */
+.progress-bar {
+  width: 100%;
+  height: 0.625rem;
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  transition: width 500ms ease-out, background-color 500ms ease-out;
+}
+
+.progress-bar__fill--safe { background-color: var(--color-green-500); }
+.progress-bar__fill--caution { background-color: var(--color-yellow-500); }
+.progress-bar__fill--danger { background-color: var(--color-red-500); }

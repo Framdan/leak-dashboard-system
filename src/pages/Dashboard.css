@@ -1,0 +1,296 @@
+.dash-layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.dash-header-title {
+    font-size: var(--font-2xl);
+    line-height: 1.2;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.dash-header-subtitle {
+    color: var(--color-gray-500);
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    margin-top: var(--spacing-1);
+    margin-bottom: 0;
+}
+
+.dash-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .dash-metrics-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.dash-metric-card {
+    background-color: var(--color-white);
+    padding: var(--spacing-5);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dash-metric-label {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    color: var(--color-gray-500);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.025em;
+    margin-bottom: var(--spacing-1);
+    margin-top: 0;
+}
+
+.dash-metric-value {
+    font-size: var(--font-3xl);
+    line-height: 1.2;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.dash-metric-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dash-icon-blue {
+    background-color: #eff6ff;
+    color: #3b82f6;
+}
+
+.dash-icon-green {
+    background-color: #f0fdf4;
+    color: #22c55e;
+}
+
+.dash-icon-yellow {
+    background-color: #fefce8;
+    color: #eab308;
+}
+
+.dash-icon-red {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.dash-icon-purple {
+    background-color: #faf5ff;
+    color: #a855f7;
+}
+
+.dash-icon-orange {
+    background-color: #fff7ed;
+    color: #f97316;
+}
+
+.dash-section-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+    padding: var(--spacing-8);
+}
+
+.dash-section-card-sm {
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-100);
+    padding: var(--spacing-6);
+}
+
+.dash-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-8);
+}
+
+.dash-section-title {
+    font-size: var(--font-lg);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.dash-section-title-sm {
+    font-size: var(--font-lg);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-6);
+    margin-top: 0;
+}
+
+.dash-status-badge {
+    padding: 6px 16px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.dash-status-bg-green {
+    background-color: #dcfce7;
+    color: #16a34a;
+}
+
+.dash-status-bg-yellow {
+    background-color: #fef9c3;
+    color: #ca8a04;
+}
+
+.dash-status-bg-red {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.dash-stats-row {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--spacing-8);
+    margin-bottom: var(--spacing-10);
+}
+
+@media (min-width: 768px) {
+    .dash-stats-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.dash-stat-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.dash-stat-label {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    color: var(--color-gray-500);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-1);
+    margin-top: 0;
+}
+
+.dash-stat-value {
+    font-size: var(--font-xl);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.dash-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing-2);
+}
+
+.dash-progress-label {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-600);
+    margin: 0;
+}
+
+.dash-progress-value {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+}
+
+.dash-progress-track {
+    position: relative;
+    width: 100%;
+    height: 0.75rem;
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.dash-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition-property: all;
+    transition-duration: 500ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.dash-progress-fill-green {
+    background-color: #22c55e;
+}
+
+.dash-progress-fill-yellow {
+    background-color: #facc15;
+}
+
+.dash-progress-fill-red {
+    background-color: #ef4444;
+}
+
+.dash-progress-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.dash-text-green {
+    color: #16a34a;
+}
+
+.dash-text-yellow {
+    color: #ca8a04;
+}
+
+.dash-sensors-section {
+    margin-top: var(--spacing-8);
+}
+
+.dash-sensors-title {
+    font-size: var(--font-xl);
+    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--spacing-6);
+    padding-left: var(--spacing-1);
+    padding-right: var(--spacing-1);
+    margin-top: 0;
+}
+
+.dash-sensors-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
