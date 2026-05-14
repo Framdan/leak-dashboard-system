@@ -6,6 +6,8 @@ const authRoutes = require("./src/routes/authRoutes");
 const nodeRoutes = require("./src/routes/nodeRoutes");
 const alertRoutes = require("./src/routes/alertRoutes");
 const dashboardRoutes = require("./src/routes/dashboardRoutes");
+const settingsRoutes = require("./src/routes/settingsRoutes");
+const readingRoutes = require("./src/routes/readingRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
 
 const app = express();
@@ -23,6 +25,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/nodes", nodeRoutes);
 app.use("/api/alerts", alertRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api", settingsRoutes);
+app.use("/api/readings", readingRoutes);
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
