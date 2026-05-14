@@ -1,14 +1,19 @@
 import React, { useContext, useState } from "react";
 import "./MapView.css";
 import { NodeContext } from "../context/NodeContext";
-import { Info, MapPin, Activity, AlertCircle, Radio } from "lucide-react";
+import { Info, MapPin, Activity, AlertCircle, Radio, WifiOff } from "lucide-react";
+
+const OFFLINE_AFTER_MS = 10 * 60 * 1000;
+
+const isNodeOffline = (lastUpdate) => {
+  if (!lastUpdate) return true;
+  return Date.now() - new Date(lastUpdate).getTime() > OFFLINE_AFTER_MS;
+};
 
 export default function MapView() {
   const { nodes, settings } = useContext(NodeContext);
   const [selectedNodeId, setSelectedNodeId] = useState(nodes?.[0]?.id || null);
   const [hoveredNodeId, setHoveredNodeId] = useState(null);
-
-  if (!nodes || !settings) return null;
 
   if (!nodes || !settings) return null;
 
@@ -22,13 +27,14 @@ export default function MapView() {
       top: `${20 + (Math.floor(i / 3) * 30)}%`, 
       left: `${15 + ((i % 3) * 35)}%` 
     },
-    pipeAge: node.pipe_age || 0,
+    pipeAge: node.pipeAge || 0,
   }));
 
   const selectedNode = enrichedNodes.find(n => n.id === selectedNodeId) || enrichedNodes[0];
 
   const getStatus = (node) => {
     if (!node) return "safe";
+    if (isNodeOffline(node.lastUpdate)) return "offline";
     const utilization = node.maop > 0 ? node.pressure / node.maop : 0;
     if (utilization >= settings.warningThreshold) return "danger";
     if (utilization >= settings.safeThreshold) return "caution";
@@ -36,6 +42,7 @@ export default function MapView() {
   };
 
   const getStatusClasses = (status) => {
+    if (status === "offline") return { bg: "map-status-offline", mark: "map-bg-gray", pulse: "gray" };
     if (status === "danger") return { bg: "map-status-danger", mark: "map-bg-red", pulse: "red" };
     if (status === "caution") return { bg: "map-status-caution", mark: "map-bg-yellow", pulse: "yellow" };
     return { bg: "map-status-safe", mark: "map-bg-green", pulse: "green" };
@@ -52,7 +59,7 @@ export default function MapView() {
         <div className="map-card-header">
           <h3 className="map-card-title">Device Details</h3>
           <div className={`map-status-badge ${classes.bg}`}>
-            {status === 'safe' || status === 'caution' ? <Activity size={14} /> : <AlertCircle size={14} />}
+            {status === 'offline' ? <WifiOff size={14} /> : status === 'safe' || status === 'caution' ? <Activity size={14} /> : <AlertCircle size={14} />}
             <span>{status}</span>
           </div>
         </div>
@@ -148,6 +155,10 @@ export default function MapView() {
               <div className="map-legend">
                 <h4 className="map-legend-title">Status Legend</h4>
                 <div className="map-legend-list">
+                  <div className="map-legend-item">
+                    <div className="map-legend-dot map-bg-gray"></div>
+                    Offline
+                  </div>
                   <div className="map-legend-item">
                     <div className="map-legend-dot map-bg-green"></div>
                     Safe (&lt;{Math.round(settings.safeThreshold * 100)}%)

@@ -278,10 +278,12 @@
 .map-bg-green { background-color: #22c55e; }
 .map-bg-yellow { background-color: #eab308; }
 .map-bg-red { background-color: #ef4444; }
+.map-bg-gray { background-color: #9ca3af; }
 
 .sensor-pulse.green { background-color: rgba(34, 197, 94, 0.3); }
 .sensor-pulse.yellow { background-color: rgba(234, 179, 8, 0.3); }
 .sensor-pulse.red { background-color: rgba(239, 68, 68, 0.3); }
+.sensor-pulse.gray { background-color: rgba(156, 163, 175, 0.3); }
 
 /* Status Badge */
 .map-status-badge {
@@ -299,6 +301,7 @@
 .map-status-safe { background-color: #dcfce7; color: #15803d; } /* bg-green-100 text-green-700 */
 .map-status-caution { background-color: #fef9c3; color: #a16207; } /* bg-yellow-100 text-yellow-700 */
 .map-status-danger { background-color: #fee2e2; color: #b91c1c; } /* bg-red-100 text-red-700 */
+.map-status-offline { background-color: #f3f4f6; color: #4b5563; }
 
 /* Device Detail Items */
 .map-device-info-list {
