@@ -34,7 +34,7 @@ export default function MapView() {
 
   const getStatus = (node) => {
     if (!node) return "safe";
-    if (isNodeOffline(node.lastUpdate)) return "offline";
+    if (isNodeOffline(node.lastUpdate)) return "paused";
     const utilization = node.maop > 0 ? node.pressure / node.maop : 0;
     if (utilization >= settings.warningThreshold) return "danger";
     if (utilization >= settings.safeThreshold) return "caution";
@@ -42,7 +42,7 @@ export default function MapView() {
   };
 
   const getStatusClasses = (status) => {
-    if (status === "offline") return { bg: "map-status-offline", mark: "map-bg-gray", pulse: "gray" };
+    if (status === "paused") return { bg: "map-status-offline", mark: "map-bg-gray", pulse: "gray" };
     if (status === "danger") return { bg: "map-status-danger", mark: "map-bg-red", pulse: "red" };
     if (status === "caution") return { bg: "map-status-caution", mark: "map-bg-yellow", pulse: "yellow" };
     return { bg: "map-status-safe", mark: "map-bg-green", pulse: "green" };
@@ -57,16 +57,16 @@ export default function MapView() {
     return (
       <div className="map-card">
         <div className="map-card-header">
-          <h3 className="map-card-title">Device Details</h3>
+          <h3 className="map-card-title">Simulation Node Details</h3>
           <div className={`map-status-badge ${classes.bg}`}>
-            {status === 'offline' ? <WifiOff size={14} /> : status === 'safe' || status === 'caution' ? <Activity size={14} /> : <AlertCircle size={14} />}
-            <span>{status}</span>
+            {status === 'paused' ? <WifiOff size={14} /> : status === 'safe' || status === 'caution' ? <Activity size={14} /> : <AlertCircle size={14} />}
+            <span>{status === 'paused' ? 'no data' : status}</span>
           </div>
         </div>
         
         <div className="map-device-info-list">
           <div>
-            <p className="map-label">Device Name</p>
+            <p className="map-label">Simulation Node Name</p>
             <p className="map-value">{node.name}</p>
           </div>
           
@@ -117,9 +117,9 @@ export default function MapView() {
                 <p className="map-value-sm">{node.pipeAge} Years</p>
               </div>
               <div>
-                <p className="map-label">Device ID</p>
+                <p className="map-label">Simulation Node ID</p>
                 <p className="map-code-block map-code-inline">
-                  {node.deviceId || `sensor-${node.id?.toString().padStart(3, '0')}`}
+                  {node.deviceId || `sim-${node.id?.toString().padStart(3, '0')}`}
                 </p>
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function MapView() {
   return (
     <div className="map-layout-wrapper">
       <div className="map-header">
-        <h2 className="map-header-title">Sensor Locations</h2>
+        <h2 className="map-header-title">Simulation Node Locations</h2>
         <p className="map-header-subtitle">Interactive Layout View</p>
       </div>
 
@@ -157,7 +157,7 @@ export default function MapView() {
                 <div className="map-legend-list">
                   <div className="map-legend-item">
                     <div className="map-legend-dot map-bg-gray"></div>
-                    Offline
+                    Simulation Paused / No Data
                   </div>
                   <div className="map-legend-item">
                     <div className="map-legend-dot map-bg-green"></div>
@@ -211,12 +211,12 @@ export default function MapView() {
               <div className="map-empty-icon-box">
                 <MapPin size={32} />
               </div>
-              <p className="map-empty-text">Select a sensor on the map to view its details</p>
+              <p className="map-empty-text">Select a simulation node on the map to view its details</p>
             </div>
           )}
 
           <div className="map-card">
-            <h3 className="map-card-title map-list-spacing">All Devices</h3>
+            <h3 className="map-card-title map-list-spacing">All Simulation Nodes</h3>
             <div className="map-list-wrapper">
               {enrichedNodes.map(node => {
                 const status = getStatus(node);

@@ -67,7 +67,7 @@ export default function AddNodeForm() {
         />
 
         <input
-          placeholder="Device ID (e.g. sensor-kigali-001)"
+          placeholder="Simulation Node ID (e.g. sim-kigali-001)"
           value={form.deviceId}
           onChange={(e) => setForm({ ...form, deviceId: e.target.value })}
           className="cp-form-input"

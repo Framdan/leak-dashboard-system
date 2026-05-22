@@ -23,7 +23,7 @@ export default function Navbar() {
             <Droplets size={24} />
           </div>
           <div className="navbar__title-wrapper">
-            <h1 className="navbar__title">IoT Water Monitor</h1>
+            <h1 className="navbar__title">Water Leakage Simulation Monitor</h1>
             <span className="navbar__subtitle">Leakage Prevention System</span>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/nodes" className={navLinkClass}>
             <Radio size={18} />
-            <span>Devices</span>
+            <span>Monitoring Nodes</span>
           </NavLink>
           <NavLink to="/analytics" className={navLinkClass}>
             <BarChart2 size={18} />
@@ -82,7 +82,7 @@ export default function Navbar() {
                   <Droplets size={20} />
                 </div>
                 <div className="navbar__title-wrapper">
-                  <h1 className="navbar__title">IoT Water Monitor</h1>
+                  <h1 className="navbar__title">Water Leakage Simulation Monitor</h1>
                   <span className="navbar__subtitle">Leakage Prevention System</span>
                 </div>
               </div>
@@ -102,7 +102,7 @@ export default function Navbar() {
               </NavLink>
               <NavLink to="/nodes" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
                 <Radio size={18} />
-                <span>Devices</span>
+                <span>Monitoring Nodes</span>
               </NavLink>
               <NavLink to="/analytics" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
                 <BarChart2 size={18} />

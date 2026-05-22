@@ -336,7 +336,7 @@ export default function Settings() {
             <NumberField
               label="Update Interval (seconds)"
               field="updateInterval"
-              helper="Frequency of sensor data updates"
+              helper="Frequency of simulated data updates"
             />
             <ToggleRow title="Maintenance Mode" description="Pause all alerts during maintenance" field="maintenanceMode" />
           </div>
@@ -368,7 +368,7 @@ export default function Settings() {
                     {systemStatus?.message || 'System status unavailable.'}
                   </p>
                   <p className="settings-toggle-desc" style={{ marginTop: 8 }}>
-                    Status: {systemStatus?.status || 'Unknown'} | Active devices: {systemStatus?.activeDevices ?? 0} | Open alerts: {systemStatus?.unresolvedAlerts ?? 0}
+                    Status: {systemStatus?.status || 'Unknown'} | Simulation nodes: {systemStatus?.activeDevices ?? 0} | Open alerts: {systemStatus?.unresolvedAlerts ?? 0}
                   </p>
                 </div>
               </div>

@@ -41,7 +41,7 @@ export default function Login() {
           <div className="login-logo-box">
             <Droplets size={40} strokeWidth={2} />
           </div>
-          <h2 className="login-title">IoT Water Monitor</h2>
+          <h2 className="login-title">Water Leakage Simulation Monitor</h2>
           <p className="login-subtitle">Sign in to your dashboard account</p>
         </div>
       </div>

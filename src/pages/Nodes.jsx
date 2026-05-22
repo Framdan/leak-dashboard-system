@@ -20,7 +20,7 @@ export default function Nodes() {
   const [filter, setFilter] = useState("ALL");
 
   const getStatus = (node) => {
-    if (isNodeOffline(node.lastUpdate)) return "OFFLINE";
+    if (isNodeOffline(node.lastUpdate)) return "NO_DATA";
     const ratio = (node.maop > 0) ? (node.pressure / node.maop) : 0;
     if (ratio >= settings.warningThreshold) return "WARNING";
     if (ratio >= settings.safeThreshold) return "CAUTION";
@@ -37,15 +37,15 @@ export default function Nodes() {
   });
 
   const sortedNodes = [...filteredNodes].sort((a, b) => {
-    const priority = { WARNING: 4, CAUTION: 3, OFFLINE: 2, SAFE: 1 };
+    const priority = { WARNING: 4, CAUTION: 3, NO_DATA: 2, SAFE: 1 };
     return priority[getStatus(b)] - priority[getStatus(a)];
   });
 
   return (
     <div className="nodes-layout-wrapper">
       <div>
-        <h2 className="nodes-header-title">Device Management</h2>
-        <p className="nodes-header-subtitle">Monitor and manage all sensor nodes</p>
+        <h2 className="nodes-header-title">Monitoring Nodes</h2>
+        <p className="nodes-header-subtitle">Monitor and manage all simulation nodes</p>
       </div>
 
       <div className="nodes-control-row">
@@ -55,7 +55,7 @@ export default function Nodes() {
           </div>
           <input 
             type="text"
-            placeholder="Search devices..."
+            placeholder="Search simulation nodes..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="nodes-search-input"
@@ -76,7 +76,7 @@ export default function Nodes() {
             <option value="SAFE">Safe</option>
             <option value="CAUTION">Caution</option>
             <option value="WARNING">Warning</option>
-            <option value="OFFLINE">Offline</option>
+            <option value="NO_DATA">Simulation Paused / No Data</option>
           </select>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function Nodes() {
           ))
         ) : (
           <div className="nodes-empty-state">
-            No devices matches your current filters.
+            No simulation nodes match your current filters.
           </div>
         )}
       </div>

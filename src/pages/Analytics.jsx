@@ -220,7 +220,7 @@ export default function Analytics() {
         </div>
 
         <div className="analytics-chart-card">
-          <h3 className="chart-title">Device Utilization</h3>
+          <h3 className="chart-title">Simulation Node Utilization</h3>
           <div className="chart-container">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={utilizationData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>

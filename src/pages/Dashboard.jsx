@@ -67,7 +67,7 @@ export default function Dashboard() {
     statusColor = "dash-status-bg-yellow";
     progressColor = "dash-progress-fill-yellow";
   } else if (offlineCount > 0) {
-    systemStatusText = "Offline Devices";
+    systemStatusText = "Simulation Paused";
     statusColor = "dash-status-bg-gray";
   }
 
@@ -75,13 +75,13 @@ export default function Dashboard() {
     <div className="dash-layout-wrapper">
       <div className="dash-header">
         <h2 className="dash-header-title">System Overview</h2>
-        <p className="dash-header-subtitle">Real-time monitoring and predictive analytics</p>
+        <p className="dash-header-subtitle">Simulation monitoring and predictive analytics</p>
       </div>
 
       <div className="dash-metrics-grid">
         <div className="dash-metric-card">
           <div>
-            <p className="dash-metric-label">Active Sensors</p>
+            <p className="dash-metric-label">Active Simulation Nodes</p>
             <h3 className="dash-metric-value">{activeSensors}</h3>
           </div>
           <div className="dash-metric-icon-box dash-icon-blue">
@@ -115,7 +115,7 @@ export default function Dashboard() {
 
         <div className="dash-metric-card">
           <div>
-            <p className="dash-metric-label">Offline</p>
+            <p className="dash-metric-label">No Data</p>
             <h3 className="dash-metric-value">{offlineCount}</h3>
           </div>
           <div className="dash-metric-icon-box dash-icon-gray"><WifiOff size={24} strokeWidth={2.5} /></div>
@@ -130,7 +130,7 @@ export default function Dashboard() {
             {systemStatusText === 'Caution' && <AlertCircle size={16} strokeWidth={2.5} />}
             {systemStatusText === 'Danger' && <AlertCircle size={16} strokeWidth={2.5} />}
             {systemStatusText === 'Safe' && <Activity size={16} strokeWidth={2.5} />}
-            {systemStatusText === 'Offline Devices' && <WifiOff size={16} strokeWidth={2.5} />}
+            {systemStatusText === 'Simulation Paused' && <WifiOff size={16} strokeWidth={2.5} />}
             <span>{systemStatusText}</span>
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function Dashboard() {
       <RealTimePressureChart />
 
       <div className="dash-sensors-section">
-        <h3 className="dash-sensors-title">Active Sensors</h3>
+        <h3 className="dash-sensors-title">Active Simulation Nodes</h3>
         <div className="dash-sensors-list">
           {nodes.map((node) => (
             <DashboardSensorRow key={node.id} node={node} />

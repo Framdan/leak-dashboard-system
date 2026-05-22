@@ -38,7 +38,7 @@ export default function DashboardSensorRow({ node }) {
   let Icon = CheckCircle2;
 
   if (offline) {
-    status = "Offline";
+    status = "No Data";
     dotColor = "#9ca3af";
     badgeProps = { bg: "#f3f4f6", color: "#4b5563" };
     Icon = WifiOff;

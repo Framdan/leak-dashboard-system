@@ -39,6 +39,7 @@ export default function RealTimePressureChart() {
 
   const fetchHistory = async () => {
     try {
+      await api.post('/readings/simulate', {});
       const historyData = await api.get('/dashboard/history');
       setData(historyData);
       setIsLive(true);
@@ -79,13 +80,13 @@ export default function RealTimePressureChart() {
     <div className="rt-pressure-card">
       <div className="rt-card-header">
         <div className="rt-header-left">
-          <h3 className="rt-card-title">Real-time Pressure Monitoring</h3>
-          <p className="rt-card-subtitle">Last 2 hours - updates every {updateIntervalSeconds} seconds</p>
+          <h3 className="rt-card-title">Live Simulation Data</h3>
+          <p className="rt-card-subtitle">Last 2 hours - simulation updates every {updateIntervalSeconds} seconds</p>
         </div>
         <div className="rt-header-right">
           <div className={`rt-live-indicator ${isLive ? 'active' : ''}`}>
             <span className="rt-dot"></span>
-            <span className="rt-live-text">{isLive ? 'Live' : 'Offline'}</span>
+            <span className="rt-live-text">{isLive ? 'Live Simulation' : 'Simulation Paused'}</span>
           </div>
         </div>
       </div>

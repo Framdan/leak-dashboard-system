@@ -42,7 +42,7 @@ export default function NodeCard({ node }) {
   let StatusIcon = Check;
 
   if (offline) {
-    statusLabel = "Offline";
+    statusLabel = "Simulation Paused";
     badgeProps = { bg: "#f3f4f6", color: "#4b5563" };
     progressBarBg = "#9ca3af";
     StatusIcon = WifiOff;
@@ -83,7 +83,7 @@ export default function NodeCard({ node }) {
           className="node-card-edit-input"
         />
 
-        <label className="node-card-edit-label">Device ID</label>
+        <label className="node-card-edit-label">Simulation Node ID</label>
         <input
           value={form.deviceId || ""}
           onChange={(e) => setForm({ ...form, deviceId: e.target.value })}
@@ -128,7 +128,7 @@ export default function NodeCard({ node }) {
               {node.location || "Unknown Location"}
             </div>
             <div className="node-card-loc">
-              {node.deviceId || "No device ID"}
+              {node.deviceId || "No simulation node ID"}
             </div>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function NodeCard({ node }) {
           <div className="node-card-footer-label">
             <Activity size={14} style={{marginRight: '4px'}}/> Status
           </div>
-          <div className="node-card-footer-val">{offline ? "Offline" : "Online"}</div>
+          <div className="node-card-footer-val">{offline ? "No Data" : "Simulating"}</div>
         </div>
       </div>
     </div>
