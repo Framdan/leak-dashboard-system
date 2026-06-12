@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const defaultBase = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || defaultBase;
 
 const getHeaders = () => {
   const token = localStorage.getItem('authToken');
