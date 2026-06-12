@@ -21,7 +21,11 @@ export default function Nodes() {
 
   const getStatus = (node) => {
     if (isNodeOffline(node.lastUpdate)) return "NO_DATA";
-    const ratio = (node.maop > 0) ? (node.pressure / node.maop) : 0;
+    const degradationRate = settings.degradationFactor ?? 0.01;
+    const age = node.pipeAge ?? 0;
+    const maopAdj = node.maop * Math.max(0.05, 1 - (degradationRate * age));
+    
+    const ratio = maopAdj > 0 ? node.pressure / maopAdj : 0;
     if (ratio >= settings.warningThreshold) return "WARNING";
     if (ratio >= settings.safeThreshold) return "CAUTION";
     return "SAFE";

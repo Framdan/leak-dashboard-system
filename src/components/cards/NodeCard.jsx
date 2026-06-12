@@ -32,7 +32,11 @@ export default function NodeCard({ node }) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState(node);
 
-  const ratio = node.maop > 0 ? node.pressure / node.maop : 0;
+  const degradationRate = settings.degradationFactor ?? 0.01;
+  const age = node.pipeAge ?? 0;
+  const maopAdj = node.maop * Math.max(0.05, 1 - (degradationRate * age));
+
+  const ratio = maopAdj > 0 ? node.pressure / maopAdj : 0;
   const utilization = (ratio * 100).toFixed(1);
   const offline = isNodeOffline(node.lastUpdate);
 
@@ -155,8 +159,13 @@ export default function NodeCard({ node }) {
           <p className="node-card-stat-val" style={{ color: isCritical ? '#dc2626' : offline ? '#6b7280' : undefined }}>{node.pressure.toFixed(1)} PSI</p>
         </div>
         <div>
-          <p className="node-card-stat-label">Threshold</p>
-          <p className="node-card-stat-val">{node.maop} PSI</p>
+          <p className="node-card-stat-label">Threshold (MAOPadj)</p>
+          <p className="node-card-stat-val">
+            {maopAdj.toFixed(1)} PSI
+            <span style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 'normal', marginLeft: '6px' }}>
+              (Base: {node.maop})
+            </span>
+          </p>
         </div>
       </div>
 

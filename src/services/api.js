@@ -62,6 +62,16 @@ export const api = {
     });
     return handleResponse(response);
   },
+
+  health: async () => {
+    const response = await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return handleResponse(response);
+  }
 };
 
 export default api;

@@ -82,13 +82,17 @@ const getDashboardSummary = asyncHandler(async (req, res, next) => {
       return;
     }
 
-    const utilization = node.maop > 0 ? (node.currentPressure / node.maop) * 100 : 0;
+    const lambda = (settings.degradationFactor || 1) / 100;
+    const age = node.pipeAge || 0;
+    const maopAdj = node.maop * Math.max(0.05, 1 - (lambda * age));
+
+    const utilization = maopAdj > 0 ? (node.currentPressure / maopAdj) * 100 : 0;
     if (node.currentPressure >= settings.maxPressure || utilization >= settings.cautionThreshold) warningCount++;
     else if (utilization >= settings.safeThreshold) cautionCount++;
     else safeCount++;
 
     totalActivePressure += node.currentPressure;
-    totalActiveMaop += node.maop;
+    totalActiveMaop += maopAdj;
   });
 
   const activeSensors = Math.max(result.activeSensors - offlineCount, 0);

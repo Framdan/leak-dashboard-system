@@ -27,7 +27,11 @@ const formatLastUpdate = (lastUpdate) => {
 export default function DashboardSensorRow({ node }) {
   const { settings } = useContext(NodeContext);
 
-  const ratio = node.maop > 0 ? node.pressure / node.maop : 0;
+  const degradationRate = settings.degradationFactor ?? 0.01;
+  const age = node.pipeAge ?? 0;
+  const maopAdj = node.maop * Math.max(0.05, 1 - (degradationRate * age));
+
+  const ratio = maopAdj > 0 ? node.pressure / maopAdj : 0;
   let percentage = (ratio * 100).toFixed(1);
   if (isNaN(percentage)) percentage = "0.0";
   const offline = isNodeOffline(node.lastUpdate);

@@ -5,17 +5,21 @@ const ErrorResponse = require('../middleware/errorResponse');
 const { sendAlertEmail } = require('../config/mailer');
 
 const getAlertLevel = (node, settings) => {
-  const utilization = node.maop > 0 ? (node.pressure / node.maop) * 100 : 0;
+  const lambda = (settings.degradationFactor || 1) / 100;
+  const age = node.pipeAge || 0;
+  const maopAdj = node.maop * Math.max(0.05, 1 - (lambda * age));
+  
+  const utilization = maopAdj > 0 ? (node.pressure / maopAdj) * 100 : 0;
 
   if (node.pressure >= settings.maxPressure || utilization >= settings.cautionThreshold) {
-    return { level: 'warning', utilization };
+    return { level: 'warning', utilization, maopAdj };
   }
 
   if (utilization >= settings.safeThreshold) {
-    return { level: 'caution', utilization };
+    return { level: 'caution', utilization, maopAdj };
   }
 
-  return { level: 'safe', utilization };
+  return { level: 'safe', utilization, maopAdj };
 };
 
 const shouldSendEmail = (settings) => {
@@ -29,8 +33,8 @@ const shouldSendEmail = (settings) => {
   );
 };
 
-const createAlert = async (node, level, utilization, settings) => {
-  const message = `${level.toUpperCase()} simulated pressure condition on ${node.name} at ${node.location}: ${node.pressure} PSI (${utilization.toFixed(1)}% utilization).`;
+const createAlert = async (node, level, utilization, settings, maopAdj) => {
+  const message = `${level.toUpperCase()} pressure condition on ${node.name} at ${node.location}: ${node.pressure} PSI (${utilization.toFixed(1)}% utilization of Adjusted MAOP: ${maopAdj.toFixed(1)} PSI, Pipe Age: ${node.pipeAge || 0} yrs).`;
   const alert = await Alert.create({
     nodeId: node._id,
     nodeName: node.name,
@@ -77,7 +81,7 @@ const evaluateNodeReading = async (node, pressure) => {
   let autoAcknowledged = 0;
   let skipped = 0;
   let alert = null;
-  const { level, utilization } = getAlertLevel(nodeSnapshot, settings);
+  const { level, utilization, maopAdj } = getAlertLevel(nodeSnapshot, settings);
 
   if (level === 'safe') {
     if (settings.autoAcknowledgeSafeAlerts) {
@@ -149,7 +153,7 @@ const evaluateNodeReading = async (node, pressure) => {
     };
   }
 
-  alert = await createAlert(nodeSnapshot, level, utilization, settings);
+  alert = await createAlert(nodeSnapshot, level, utilization, settings, maopAdj);
   created++;
 
   return {

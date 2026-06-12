@@ -14,6 +14,12 @@ import "./RealTimePressureChart.css";
 import api from "../../services/api";
 import { NodeContext } from "../../context/NodeContext";
 
+const OFFLINE_AFTER_MS = 10 * 60 * 1000;
+const isNodeOffline = (lastUpdate) => {
+  if (!lastUpdate) return true;
+  return Date.now() - new Date(lastUpdate).getTime() > OFFLINE_AFTER_MS;
+};
+
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     const date = new Date(label);
@@ -21,7 +27,7 @@ const CustomTooltip = ({ active, payload, label }) => {
     return (
       <div className="rt-chart-tooltip">
         <p className="rt-tooltip-time">{timeStr}</p>
-        <p className="rt-tooltip-value">Current Pressure: <span className="rt-value-highlight">{payload[0].value.toFixed(2)}</span></p>
+        <p className="rt-tooltip-value">Current Pressure: <span className="rt-value-highlight">{payload[0].value.toFixed(2)} PSI</span></p>
       </div>
     );
   }
@@ -29,13 +35,29 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function RealTimePressureChart() {
-  const { settings } = useContext(NodeContext);
+  const { nodes, settings, backendHealthy } = useContext(NodeContext);
   const [data, setData] = useState([]);
-  const [isLive, setIsLive] = useState(true);
+  const [isLive, setIsLive] = useState(false);
   const timerRef = useRef(null);
   const updateIntervalSeconds = Math.max(Number(settings.updateInterval) || 3, 1);
-  const safePercent = Math.round(settings.safeThreshold * 100);
-  const cautionPercent = Math.round(settings.warningThreshold * 100);
+
+  // Calculate the average Adjusted MAOP dynamically from active nodes
+  const averageMaop = useMemo(() => {
+    const activeNodes = nodes.filter(n => !isNodeOffline(n.lastUpdate));
+    if (activeNodes.length === 0) return 40; // Default baseline fallback
+
+    const lambda = settings.degradationFactor ?? 0.01;
+    const totalMaopAdj = activeNodes.reduce((sum, n) => {
+      const age = n.pipeAge ?? 0;
+      const maopAdj = n.maop * Math.max(0.05, 1 - (lambda * age));
+      return sum + maopAdj;
+    }, 0);
+    return totalMaopAdj / activeNodes.length;
+  }, [nodes, settings]);
+
+  const safeLimit = parseFloat(Number(averageMaop * settings.safeThreshold).toFixed(1));
+  const cautionLimit = parseFloat(Number(averageMaop * settings.warningThreshold).toFixed(1));
+  const warningLimit = parseFloat(Number(averageMaop).toFixed(1));
 
   const fetchHistory = async () => {
     try {
@@ -46,6 +68,7 @@ export default function RealTimePressureChart() {
     } catch (error) {
       console.error('Error fetching system history:', error);
       setIsLive(false);
+      setData([]);
     }
   };
 
@@ -84,9 +107,13 @@ export default function RealTimePressureChart() {
           <p className="rt-card-subtitle">Last 2 hours - simulation updates every {updateIntervalSeconds} seconds</p>
         </div>
         <div className="rt-header-right">
-          <div className={`rt-live-indicator ${isLive ? 'active' : ''}`}>
+          <div className={`rt-live-indicator ${backendHealthy && isLive ? 'active' : ''}`}>
             <span className="rt-dot"></span>
-            <span className="rt-live-text">{isLive ? 'Live Simulation' : 'Simulation Paused'}</span>
+            <span className="rt-live-text">
+              {backendHealthy
+                ? (isLive ? 'Live Simulation' : 'Simulation Paused')
+                : 'Backend Disconnected'}
+            </span>
           </div>
         </div>
       </div>
@@ -119,11 +146,10 @@ export default function RealTimePressureChart() {
               dy={10}
             />
             <YAxis
-              domain={[0, 100]}
+              domain={[0, 'dataMax + 10']}
               axisLine={{ stroke: '#cbd5e1', strokeWidth: 1 }}
               tickLine={{ stroke: '#cbd5e1' }}
               tick={{ fill: '#64748b', fontSize: 11, fontWeight: 500 }}
-              ticks={[0, 25, 50, 75, 100]}
               label={{
                 value: 'Pressure (PSI)',
                 angle: -90,
@@ -140,27 +166,27 @@ export default function RealTimePressureChart() {
             />
 
             <ReferenceLine
-              y={safePercent}
+              y={safeLimit}
               stroke="#22c55e"
               strokeWidth={1.5}
               strokeDasharray="4 4"
-              label={{ position: 'right', value: `Safe (${safePercent}%)`, fill: '#22c55e', fontSize: 11, fontWeight: 600, offset: 10 }}
+              label={{ position: 'right', value: `Safe (${safeLimit} PSI)`, fill: '#22c55e', fontSize: 11, fontWeight: 600, offset: 10 }}
             />
 
             <ReferenceLine
-              y={cautionPercent}
+              y={cautionLimit}
               stroke="#eab308"
               strokeWidth={1.5}
               strokeDasharray="4 4"
-              label={{ position: 'right', value: `Caution (${cautionPercent}%)`, fill: '#eab308', fontSize: 11, fontWeight: 600, offset: 10 }}
+              label={{ position: 'right', value: `Caution (${cautionLimit} PSI)`, fill: '#eab308', fontSize: 11, fontWeight: 600, offset: 10 }}
             />
 
             <ReferenceLine
-              y={100}
+              y={warningLimit}
               stroke="#ef4444"
               strokeWidth={1.5}
               strokeDasharray="4 4"
-              label={{ position: 'right', value: 'Threshold', fill: '#ef4444', fontSize: 11, fontWeight: 600, offset: 10 }}
+              label={{ position: 'right', value: `MAOPadj (${warningLimit} PSI)`, fill: '#ef4444', fontSize: 11, fontWeight: 600, offset: 10 }}
             />
 
             <Area

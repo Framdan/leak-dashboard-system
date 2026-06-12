@@ -29,3 +29,31 @@
     padding: var(--spacing-8);
   }
 }
+
+/* Desktop: place nav on the left as a vertical sidebar */
+@media (min-width: 1024px) {
+  .app-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .app-layout__nav {
+    width: 18rem;
+    flex: 0 0 18rem;
+    height: 100vh;
+    overflow: auto;
+    border-right: 1px solid var(--color-gray-100);
+    background-color: var(--color-white);
+  }
+
+  .app-layout__main {
+    flex: 1 1 auto;
+  }
+
+  .app-layout__content {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: calc(var(--spacing-6) * 1.25);
+  }
+}

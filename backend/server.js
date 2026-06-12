@@ -8,6 +8,7 @@ const alertRoutes = require("./src/routes/alertRoutes");
 const dashboardRoutes = require("./src/routes/dashboardRoutes");
 const settingsRoutes = require("./src/routes/settingsRoutes");
 const readingRoutes = require("./src/routes/readingRoutes");
+const simulationRoutes = require("./src/routes/simulationRoutes");
 const errorHandler = require("./src/middleware/errorMiddleware");
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api/alerts", alertRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api", settingsRoutes);
 app.use("/api/readings", readingRoutes);
+app.use("/api/simulation", simulationRoutes);
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });

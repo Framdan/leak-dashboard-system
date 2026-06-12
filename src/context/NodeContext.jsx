@@ -8,6 +8,7 @@ const defaultFrontendSettings = {
   warningThreshold: 0.85,
   updateInterval: 3,
   alertSounds: true,
+  degradationFactor: 0.01,
 };
 
 const toFrontendSettings = (settings) => ({
@@ -15,17 +16,30 @@ const toFrontendSettings = (settings) => ({
   warningThreshold: Number(settings.cautionThreshold ?? 85) / 100,
   updateInterval: Number(settings.updateInterval ?? 3),
   alertSounds: Boolean(settings.pushNotifications ?? true),
+  degradationFactor: Number(settings.degradationFactor ?? 1) / 100,
 });
 
 function NodeProvider({ children }) {
   const [nodes, setNodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState(defaultFrontendSettings);
+  const [backendHealthy, setBackendHealthy] = useState(true);
+
+  const fetchHealth = async () => {
+    try {
+      await api.health();
+      setBackendHealthy(true);
+    } catch (error) {
+      console.error('Backend health check failed:', error);
+      setBackendHealthy(false);
+    }
+  };
 
   const fetchNodes = async () => {
     try {
       setLoading(true);
       const data = await api.get('/nodes');
+      setBackendHealthy(true);
       // Map _id to id for frontend compatibility and ensure pressure/history exist
       setNodes(data.map(node => ({
         ...node,
@@ -36,6 +50,7 @@ function NodeProvider({ children }) {
       })));
     } catch (error) {
       console.error('Error fetching nodes:', error);
+      setBackendHealthy(false);
     } finally {
       setLoading(false);
     }
@@ -46,9 +61,11 @@ function NodeProvider({ children }) {
       const data = await api.get('/settings');
       const frontendSettings = toFrontendSettings(data);
       setSettings(frontendSettings);
+      setBackendHealthy(true);
       return frontendSettings;
     } catch (error) {
       console.error('Error fetching settings:', error);
+      setBackendHealthy(false);
       return defaultFrontendSettings;
     }
   };
@@ -61,6 +78,7 @@ function NodeProvider({ children }) {
 
   useEffect(() => {
   if (localStorage.getItem('authToken')) {  
+    fetchHealth();
     fetchNodes();
     fetchSettings();
   } else {
@@ -128,7 +146,8 @@ function NodeProvider({ children }) {
       setSettings,
       fetchSettings,
       applyBackendSettings,
-      loading 
+      loading,
+      backendHealthy
     }}>
       {children}
     </NodeContext.Provider>

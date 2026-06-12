@@ -54,7 +54,7 @@
   letter-spacing: 0.025em;
 }
 
-/* Nav Menu Desktop */
+/* Nav Menu Desktop: vertical sidebar layout */
 .nav-menu {
   display: none;
   align-items: center;
@@ -64,7 +64,31 @@
 @media (min-width: 1024px) {
   .nav-menu {
     display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--spacing-6) 0;
+    width: 100%;
   }
+
+  .navbar {
+    height: 100vh;
+    border-right: 1px solid var(--color-gray-100);
+  }
+
+  .navbar__container {
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+
+  .navbar__brand {
+    padding-top: var(--spacing-4);
+  }
+
+  .mobile-menu-btn { display: none; }
 }
 
 .nav-link {
