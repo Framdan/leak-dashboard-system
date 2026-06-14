@@ -1,135 +1,180 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./Navbar.css";
 import { NavLink } from "react-router-dom";
-import { Droplets, LayoutGrid, Radio, BarChart2, Map, Bell, Settings, Menu, X, LogOut } from "lucide-react";
+import {
+  Droplets, LayoutGrid, Radio, BarChart2, Map, Bell,
+  Settings, LogOut, ChevronLeft, ChevronRight, Activity,
+  Waves
+} from "lucide-react";
+import { NodeContext } from "../../context/NodeContext";
 
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { nodes } = useContext(NodeContext);
 
   const navLinkClass = ({ isActive }) =>
-    `nav-link ${isActive ? "nav-link--active" : ""}`;
+    `sidebar-link ${isActive ? "sidebar-link--active" : ""}`;
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/login';
+    localStorage.removeItem("authToken");
+    window.location.href = "/login";
   };
 
-  return (
-    <div className="navbar">
-      <div className="navbar__container">
-        {/* Logo Section */}
-        <div className="navbar__brand">
-          <div className="navbar__logo">
-            <Droplets size={24} />
-          </div>
-          <div className="navbar__title-wrapper">
-            <h1 className="navbar__title">Water Leakage Simulation Monitor</h1>
-            <span className="navbar__subtitle">Leakage Prevention System</span>
-          </div>
+  const navGroups = [
+    {
+      label: "MAIN",
+      links: [
+        { to: "/dashboard", icon: <LayoutGrid size={18} />, label: "Dashboard" },
+      ],
+    },
+    {
+      label: "MONITORING",
+      links: [
+        { to: "/nodes", icon: <Radio size={18} />, label: "Monitoring Nodes" },
+        { to: "/analytics", icon: <BarChart2 size={18} />, label: "Analytics" },
+        { to: "/map", icon: <Map size={18} />, label: "Map View" },
+        { to: "/alerts-page", icon: <Bell size={18} />, label: "Alerts" },
+      ],
+    },
+    {
+      label: "SYSTEM",
+      links: [
+        { to: "/settings", icon: <Settings size={18} />, label: "Admin" },
+      ],
+    },
+  ];
+
+  const SidebarContent = ({ isMobile = false }) => (
+    <div className={`sidebar-inner${collapsed && !isMobile ? " sidebar-inner--collapsed" : ""}`}>
+      {/* Brand */}
+      <div className="sidebar-brand">
+        <div className="sidebar-logo">
+          <Droplets size={20} />
         </div>
-
-        {/* Navigation Links */}
-        <nav className="nav-menu">
-           <NavLink to="/dashboard" className={navLinkClass}>
-            <LayoutGrid size={18} />
-            <span>Dashboard</span>
-          </NavLink>
-          <NavLink to="/nodes" className={navLinkClass}>
-            <Radio size={18} />
-            <span>Monitoring Nodes</span>
-          </NavLink>
-          <NavLink to="/analytics" className={navLinkClass}>
-            <BarChart2 size={18} />
-            <span>Analytics</span>
-          </NavLink>
-          <NavLink to="/map" className={navLinkClass}>
-            <Map size={18} />
-            <span>Map View</span>
-          </NavLink>
-          <NavLink to="/alerts-page" className={navLinkClass}>
-            <Bell size={18} />
-            <span>Alerts</span>
-          </NavLink>
-           <NavLink to="/settings" className={navLinkClass}>
-            <Settings size={18} />
-            <span>Admin</span>
-          </NavLink>
-          
-          <button className="logout-btn-styled" onClick={handleLogout}>
-            <LogOut size={18} />
-            <span>Logout</span>
+        {(!collapsed || isMobile) && (
+          <div className="sidebar-brand-text">
+            <span className="sidebar-brand-name">AquaTrace</span>
+            <span className="sidebar-brand-sub">Leak Monitor</span>
+          </div>
+        )}
+        {!isMobile && (
+          <button
+            className="sidebar-collapse-btn"
+            onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
-        </nav>
-
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="mobile-menu-btn" 
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Open mobile menu"
-        >
-          <Menu size={24} />
-        </button>
+        )}
       </div>
 
-      {/* Mobile Sidebar System */}
-      {isMobileMenuOpen && (
-        <>
-          <div className="mobile-overlay" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="mobile-sidebar">
-            <div className="mobile-sidebar__header">
-              <div className="navbar__brand">
-                <div className="navbar__logo">
-                  <Droplets size={20} />
-                </div>
-                <div className="navbar__title-wrapper">
-                  <h1 className="navbar__title">Water Leakage Simulation Monitor</h1>
-                  <span className="navbar__subtitle">Leakage Prevention System</span>
-                </div>
-              </div>
-              <button 
-                className="mobile-menu-close" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="Close mobile menu"
+      {/* Live Status Badge */}
+      {(!collapsed || isMobile) && (
+        <div className="sidebar-live-badge">
+          <span className="sidebar-live-dot" />
+          <span className="sidebar-live-text">Live Monitoring</span>
+          <Waves size={12} className="sidebar-live-wave" />
+        </div>
+      )}
+      {(collapsed && !isMobile) && (
+        <div className="sidebar-live-badge sidebar-live-badge--icon">
+          <span className="sidebar-live-dot" />
+        </div>
+      )}
+
+      {/* Nav Groups */}
+      <nav className="sidebar-nav">
+        {navGroups.map((group) => (
+          <div key={group.label} className="sidebar-group">
+            {(!collapsed || isMobile) && (
+              <span className="sidebar-group-label">{group.label}</span>
+            )}
+            {group.links.map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={navLinkClass}
+                onClick={() => isMobile && setIsMobileOpen(false)}
+                title={collapsed && !isMobile ? link.label : undefined}
               >
-                <X size={24} />
-              </button>
-            </div>
-            
-            <nav className="mobile-nav">
-               <NavLink to="/dashboard" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <LayoutGrid size={18} />
-                <span>Dashboard</span>
+                <span className="sidebar-link-icon">{link.icon}</span>
+                {(!collapsed || isMobile) && (
+                  <span className="sidebar-link-label">{link.label}</span>
+                )}
+                {(!collapsed || isMobile) && link.to === "/alerts-page" && (
+                  <span className="sidebar-link-badge">Live</span>
+                )}
               </NavLink>
-              <NavLink to="/nodes" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <Radio size={18} />
-                <span>Monitoring Nodes</span>
-              </NavLink>
-              <NavLink to="/analytics" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <BarChart2 size={18} />
-                <span>Analytics</span>
-              </NavLink>
-              <NavLink to="/map" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <Map size={18} />
-                <span>Map View</span>
-              </NavLink>
-              <NavLink to="/alerts-page" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <Bell size={18} />
-                <span>Alerts</span>
-              </NavLink>
-              
-              <div style={{ margin: 'var(--spacing-2) 0', borderTop: '1px solid var(--color-gray-100)' }} />
-                            <NavLink to="/settings" className={navLinkClass} onClick={() => setIsMobileMenuOpen(false)}>
-                <Settings size={18} />
-                <span>Admin</span>
-              </NavLink>
-              <button className="logout-btn-styled mobile-logout-btn" onClick={handleLogout}>
-                <LogOut size={18} />
-                <span>Logout</span>
-              </button>
-            </nav>
+            ))}
           </div>
+        ))}
+      </nav>
+
+      {/* Footer */}
+      <div className="sidebar-footer">
+        {(!collapsed || isMobile) && (
+          <div className="sidebar-node-count">
+            <Activity size={12} />
+            <span>{nodes?.length || 0} node{nodes?.length !== 1 ? "s" : ""} registered</span>
+          </div>
+        )}
+        <button
+          className={`sidebar-logout${collapsed && !isMobile ? " sidebar-logout--icon" : ""}`}
+          onClick={handleLogout}
+          title={collapsed && !isMobile ? "Logout" : undefined}
+        >
+          <LogOut size={16} />
+          {(!collapsed || isMobile) && <span>Logout</span>}
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className={`sidebar${collapsed ? " sidebar--collapsed" : ""}`}>
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile Top Bar */}
+      <div className="mobile-topbar">
+        <button
+          className="mobile-topbar-btn"
+          onClick={() => setIsMobileOpen(true)}
+          aria-label="Open menu"
+        >
+          <div className="mobile-topbar-hamburger">
+            <span /><span /><span />
+          </div>
+        </button>
+        <div className="mobile-topbar-brand">
+          <Droplets size={18} />
+          <span>AquaTrace</span>
+        </div>
+        <span className="mobile-live-dot" />
+      </div>
+
+      {/* Mobile Drawer */}
+      {isMobileOpen && (
+        <>
+          <div
+            className="mobile-overlay"
+            onClick={() => setIsMobileOpen(false)}
+          />
+          <aside className="sidebar sidebar--mobile-open">
+            <button
+              className="mobile-close-btn"
+              onClick={() => setIsMobileOpen(false)}
+              aria-label="Close menu"
+            >
+              ✕
+            </button>
+            <SidebarContent isMobile />
+          </aside>
         </>
       )}
-    </div>
+    </>
   );
 }

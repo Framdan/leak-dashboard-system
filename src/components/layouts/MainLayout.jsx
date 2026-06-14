@@ -5,9 +5,7 @@ import Navbar from "./Navbar";
 export default function MainLayout({ children }) {
     return (
         <div className="app-layout">
-            <div className="app-layout__nav">
-                <Navbar />
-            </div>
+            <Navbar />
             <div className="app-layout__main">
                 <div className="app-layout__content">{children}</div>
             </div>

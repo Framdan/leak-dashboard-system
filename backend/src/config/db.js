@@ -73,7 +73,11 @@ const connectDB = async () => {
       }
     }
 
-    const conn = await mongoose.connect(uri);
+    const conn = await mongoose.connect(uri, {
+      tls: true,
+      tlsAllowInvalidCertificates: false,
+      serverSelectionTimeoutMS: 10000
+    });
     console.log(`MongoDB Connected ${isMemoryDb ? '(In-Memory)' : ''}: ${conn.connection.host}`);
     
     // Auto-seed database if it is empty
