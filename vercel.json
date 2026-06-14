@@ -19,6 +19,14 @@
       "dest": "/backend/server.js"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(favicon\\.svg|favicon\\.ico|robots\\.txt|manifest\\.json)",
+      "dest": "/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
