@@ -98,4 +98,46 @@ router.post('/', deviceSecret, asyncHandler(async (req, res) => {
   });
 }));
 
+/**
+ * GET /api/ingest/config?deviceId=kgl-002
+ * Public (no auth) — Wokwi fetches node config at startup to stay in sync
+ * with the web dashboard's pipeAge, maop, and degradationFactor settings.
+ */
+router.get('/config', asyncHandler(async (req, res) => {
+  const { deviceId } = req.query;
+  if (!deviceId) {
+    return res.status(400).json({ success: false, error: 'deviceId query param is required.' });
+  }
+
+  const node = await Node.findOne({ deviceId: String(deviceId).trim().toLowerCase() });
+  if (!node) {
+    return res.status(404).json({
+      success: false,
+      error: `No node found with deviceId "${deviceId}".`
+    });
+  }
+
+  const Settings = require('../models/Settings');
+  const settings = await Settings.getSingleton();
+  const lambda = (settings.degradationFactor || 1) / 100;
+  const age = node.pipeAge || 0;
+  const maopAdj = parseFloat((node.maop * Math.max(0.05, 1 - (lambda * age))).toFixed(2));
+
+  res.status(200).json({
+    success: true,
+    data: {
+      deviceId:         node.deviceId,
+      name:             node.name,
+      location:         node.location,
+      maop:             node.maop,
+      pipeAge:          node.pipeAge,
+      maopAdj,
+      safeThreshold:    settings.safeThreshold,
+      cautionThreshold: settings.cautionThreshold,
+      degradationFactor: settings.degradationFactor
+    }
+  });
+}));
+
 module.exports = router;
+
