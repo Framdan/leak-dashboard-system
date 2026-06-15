@@ -41,7 +41,7 @@ export default function Dashboard() {
     const ms = Math.max(Number(settings.updateInterval) || 3, 1) * 1000;
     const interval = setInterval(fetchDashboardSummary, ms);
     return () => clearInterval(interval);
-  }, [settings.updateInterval]);
+  }, [settings.updateInterval, settings.safeThreshold, settings.warningThreshold, settings.degradationFactor]);
 
   const { activeSensors, safeCount, cautionCount, warningCount, offlineCount,
     averagePressure: sysPressure, averageMaop: sysMaop, utilization, totalAlerts } = summary;
