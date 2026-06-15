@@ -61,7 +61,8 @@ export default function RealTimePressureChart() {
 
   const fetchHistory = async () => {
     try {
-      await api.post('/readings/simulate', {});
+      // Only read existing readings — do NOT auto-simulate
+      // Real data comes from Wokwi (/api/ingest) or Python scripts (/api/readings)
       const historyData = await api.get('/dashboard/history');
       setData(historyData);
       setIsLive(true);
@@ -103,15 +104,15 @@ export default function RealTimePressureChart() {
     <div className="rt-pressure-card">
       <div className="rt-card-header">
         <div className="rt-header-left">
-          <h3 className="rt-card-title">Live Simulation Data</h3>
-          <p className="rt-card-subtitle">Last 2 hours - simulation updates every {updateIntervalSeconds} seconds</p>
+          <h3 className="rt-card-title">Live Pressure Data</h3>
+          <p className="rt-card-subtitle">Real readings from Wokwi & Python simulations — updates every {updateIntervalSeconds}s</p>
         </div>
         <div className="rt-header-right">
           <div className={`rt-live-indicator ${backendHealthy && isLive ? 'active' : ''}`}>
             <span className="rt-dot"></span>
             <span className="rt-live-text">
               {backendHealthy
-                ? (isLive ? 'Live Simulation' : 'Simulation Paused')
+                ? (isLive ? 'Live' : 'Waiting for data')
                 : 'Backend Disconnected'}
             </span>
           </div>

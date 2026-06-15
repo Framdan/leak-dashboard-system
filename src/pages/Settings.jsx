@@ -251,7 +251,7 @@ export default function Settings() {
             style={{ width: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8 }}
           >
             {saving ? <Loader2 size={18} /> : <Save size={18} />}
-            Save Settings
+            {saving ? 'Saving...' : hasChanges ? 'Save Settings' : 'Saved ✓'}
           </button>
         </div>
       </div>

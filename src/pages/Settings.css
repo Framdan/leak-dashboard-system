@@ -7,12 +7,12 @@
 .settings-title { font-size: var(--font-3xl); line-height: 1.2; font-weight: var(--font-weight-semibold); color: var(--color-gray-900); margin: 0;}
 .settings-subtitle { color: var(--color-gray-500); margin-top: var(--spacing-2); margin-bottom: 0;}
 
-.settings-save-btn { padding: 10px 24px; border-radius: 8px; font-weight: 500; transition-property: all; transition-duration: 150ms; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); width: 100%; cursor: pointer; border: none; }
+.settings-save-btn { padding: 10px 24px; border-radius: 8px; font-weight: 500; transition-property: all; transition-duration: 150ms; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); width: 100%; cursor: pointer; border: none; min-width: 140px; }
 @media (min-width: 768px) { .settings-save-btn { width: auto; } }
 .settings-save-btn:focus { outline: 2px solid transparent; outline-offset: 2px; box-shadow: 0 0 0 4px #dbeafe; }
 .settings-save-active { background-color: #2563eb; color: #ffffff; }
 .settings-save-active:hover { background-color: #1d4ed8; }
-.settings-save-disabled { background-color: #93c5fd; color: #ffffff; cursor: not-allowed; }
+.settings-save-disabled { background-color: #e2e8f0; color: #64748b; cursor: not-allowed; opacity: 1; }
 
 .settings-grid { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 24px; }
 @media (min-width: 1024px) { .settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; } }
