@@ -87,7 +87,7 @@ const getDashboardSummary = asyncHandler(async (req, res, next) => {
     const maopAdj = node.maop * Math.max(0.05, 1 - (lambda * age));
 
     const utilization = maopAdj > 0 ? (node.currentPressure / maopAdj) * 100 : 0;
-    if (node.currentPressure >= settings.maxPressure || utilization >= settings.cautionThreshold) warningCount++;
+    if (utilization >= settings.cautionThreshold) warningCount++;
     else if (utilization >= settings.safeThreshold) cautionCount++;
     else safeCount++;
 

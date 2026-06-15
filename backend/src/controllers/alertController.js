@@ -11,7 +11,7 @@ const getAlertLevel = (node, settings) => {
   
   const utilization = maopAdj > 0 ? (node.pressure / maopAdj) * 100 : 0;
 
-  if (node.pressure >= settings.maxPressure || utilization >= settings.cautionThreshold) {
+  if (utilization >= settings.cautionThreshold) {
     return { level: 'warning', utilization, maopAdj };
   }
 
