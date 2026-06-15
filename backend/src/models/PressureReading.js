@@ -14,7 +14,7 @@ const pressureReadingSchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ['simulation', 'manual', 'iot'],
+    enum: ['simulation', 'manual', 'iot', 'wokwi'],
     default: 'simulation',
     index: true
   },

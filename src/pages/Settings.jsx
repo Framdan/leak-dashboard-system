@@ -59,7 +59,7 @@ const normalizeSettings = (settings) => ({
 });
 
 export default function Settings() {
-  const { applyBackendSettings } = useContext(NodeContext);
+  const { applyBackendSettings, fetchNodes } = useContext(NodeContext);
   const [settings, setSettings] = useState(fallbackSettings);
   const [savedSettings, setSavedSettings] = useState(fallbackSettings);
   const [systemStatus, setSystemStatus] = useState(null);
@@ -136,6 +136,8 @@ export default function Settings() {
       setSettings(nextSettings);
       setSavedSettings(nextSettings);
       applyBackendSettings(nextSettings);
+      // Immediately refresh node data so dashboard reflects new thresholds
+      await fetchNodes();
       toast.success('Settings saved successfully.');
     } catch (error) {
       toast.error(error.message || 'Unable to save settings.');

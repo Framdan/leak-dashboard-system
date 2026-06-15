@@ -145,6 +145,7 @@ function NodeProvider({ children }) {
       settings, 
       setSettings,
       fetchSettings,
+      fetchNodes,
       applyBackendSettings,
       loading,
       backendHealthy
